@@ -1,12 +1,15 @@
 import { systemPrompt } from "@/app/api/chat/prompt";
-import { anthropic } from "@ai-sdk/anthropic";
+import { createOpenAI } from "@ai-sdk/openai";
 import { CoreMessage, streamText } from "ai";
 
 export async function POST(req: Request) {
   const { messages }: { messages: CoreMessage[] } = await req.json();
-
+  const openai = createOpenAI({
+    baseURL: "https://api.deepseek.com/v1",
+    apiKey: "sk-f9acc9e5f5a247d88baddce3e023ab69",
+  })
   const result = await streamText({
-    model: anthropic("claude-3-5-sonnet-20240620"),
+    model: openai("deepseek-chat"),
     system: systemPrompt,
     messages,
   });
